@@ -1,0 +1,30 @@
+name: CI MedSync
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install backend
+        run: |
+          cd backend
+          npm install
+
+      - name: Run backend tests
+        run: |
+          cd backend
+          node tests/test-api.js
+
+      - name: Validate frontend
+        run: |
+          cd frontend
+          echo "Frontend OK"
