@@ -14,36 +14,29 @@ jobs:
       - name: Checkout du code
         uses: actions/checkout@v4
 
-      # Installation backend
-      - name: Installer le backend
+      - name: Installer backend
         run: |
           cd backend
           npm install
 
-      # Lancer le backend
-      - name: Démarrer le backend
+      - name: Lancer backend
         run: |
           cd backend
-          node server.js &
+          nohup node server.js > server.log 2>&1 &
+          sleep 5
         shell: bash
 
-      # 🔥 Attendre que le serveur démarre
-      - name: Attendre le backend
-        run: sleep 3
-
-      # Tests
-      - name: Tester le backend
+      - name: Tester backend
         run: |
           cd backend
           node tests/test-api.js
 
-      # Installation frontend
-      - name: Installer le frontend
+      - name: Installer frontend
         run: |
           cd frontend
           npm install
 
-      - name: Build du frontend
+      - name: Build frontend
         run: |
           cd frontend
           npm run build
