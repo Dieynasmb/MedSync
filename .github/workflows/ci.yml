@@ -2,61 +2,44 @@ name: CI MedSync
 
 on:
   push:
-    branches: ["main"]
+    branches: ["principal"]
   pull_request:
-    branches: ["main"]
+    branches: ["principal"]
 
 jobs:
-  test-and-build:
+  build-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout du code
         uses: actions/checkout@v4
 
-      - name: Use Node 18
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      # --------------------------
-      # INSTALL BACKEND
-      # --------------------------
-      - name: Install backend dependencies
+      # Installation backend
+      - name: Installer le backend
         run: |
           cd backend
           npm install
 
-      # --------------------------
-      # START BACKEND IN BACKGROUND
-      # --------------------------
-      - name: Start backend server
+      # 🚀 LANCER le backend avant les tests
+      - name: Lancer le backend
         run: |
           cd backend
-          nohup npm start &
+          node server.js &
         shell: bash
 
-      # --------------------------
-      # TEST BACKEND
-      # --------------------------
-      - name: Run backend tests
+      # Exécuter les tests backend
+      - name: Tester le backend
         run: |
-          sleep 3
           cd backend
           node tests/test-api.js
 
-      # --------------------------
-      # INSTALL FRONTEND
-      # --------------------------
-      - name: Install frontend dependencies
+      # Installation et build frontend
+      - name: Installer le frontend
         run: |
           cd frontend
           npm install
 
-      # --------------------------
-      # BUILD FRONTEND
-      # --------------------------
-      - name: Build frontend
+      - name: Build du frontend
         run: |
           cd frontend
           npm run build
