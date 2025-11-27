@@ -7,24 +7,56 @@ on:
     branches: ["main"]
 
 jobs:
-  build-test:
+  test-and-build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install backend
+      - name: Use Node 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # --------------------------
+      # INSTALL BACKEND
+      # --------------------------
+      - name: Install backend dependencies
         run: |
           cd backend
           npm install
 
+      # --------------------------
+      # START BACKEND IN BACKGROUND
+      # --------------------------
+      - name: Start backend server
+        run: |
+          cd backend
+          nohup npm start &
+        shell: bash
+
+      # --------------------------
+      # TEST BACKEND
+      # --------------------------
       - name: Run backend tests
         run: |
+          sleep 3
           cd backend
           node tests/test-api.js
 
-      - name: Validate frontend
+      # --------------------------
+      # INSTALL FRONTEND
+      # --------------------------
+      - name: Install frontend dependencies
         run: |
           cd frontend
-          echo "Frontend OK"
+          npm install
+
+      # --------------------------
+      # BUILD FRONTEND
+      # --------------------------
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
