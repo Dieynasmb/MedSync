@@ -2,9 +2,9 @@ name: CI MedSync
 
 on:
   push:
-    branches: ["principale"]
+    branches: ["principal"]
   pull_request:
-    branches: ["principale"]
+    branches: ["principal"]
 
 jobs:
   build-test:
@@ -20,14 +20,18 @@ jobs:
           cd backend
           npm install
 
-      # 🚀 LANCER le backend avant les tests
-      - name: Lancer le backend
+      # Lancer le backend
+      - name: Démarrer le backend
         run: |
           cd backend
           node server.js &
         shell: bash
 
-      # Tests backend
+      # 🔥 Attendre que le serveur démarre
+      - name: Attendre le backend
+        run: sleep 3
+
+      # Tests
       - name: Tester le backend
         run: |
           cd backend
