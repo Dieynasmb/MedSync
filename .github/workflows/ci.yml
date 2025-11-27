@@ -2,9 +2,9 @@ name: CI MedSync
 
 on:
   push:
-    branches: ["principal"]
+    branches: ["principale"]
   pull_request:
-    branches: ["principal"]
+    branches: ["principale"]
 
 jobs:
   build-test:
@@ -14,22 +14,26 @@ jobs:
       - name: Checkout du code
         uses: actions/checkout@v4
 
+      # Installation backend
       - name: Installer le backend
         run: |
           cd backend
           npm install
 
+      # 🚀 LANCER le backend avant les tests
       - name: Lancer le backend
         run: |
           cd backend
           node server.js &
         shell: bash
 
+      # Tests backend
       - name: Tester le backend
         run: |
           cd backend
           node tests/test-api.js
 
+      # Installation frontend
       - name: Installer le frontend
         run: |
           cd frontend
